@@ -1,0 +1,33 @@
+{
+  "name": "signb-project",
+  "version": "1.0.0",
+  "description": "SI GyneBot",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "deploy": "gcloud app deploy --project=signb-project"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jewkub/signb-project.git"
+  },
+  "keywords": [
+    "Bot"
+  ],
+  "author": "SI Computer Club",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jewkub/signb-project/issues"
+  },
+  "homepage": "https://github.com/jewkub/signb-project#readme",
+  "dependencies": {
+    "@google-cloud/firestore": "^3.5.1",
+    "actions-on-google": "^2.12.0",
+    "body-parser": "^1.19.0",
+    "dialogflow-fulfillment": "^0.6.1",
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "request": "^2.88.2"
+  }
+}
