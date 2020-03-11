@@ -1,3 +1,7 @@
+/**
+ * This file is used to manage routes that come from webhook from Dialogflow.
+ */
+
 const request = require('request');
 const express = require('express');
 const router = express.Router();
@@ -15,12 +19,10 @@ router.get('/webhook', async (req, res, next) => {
   res.send('ok');
 });
 
-router.post('/webhook', async (req, res, next) => {
+router.post('/webhook', async (req, res, next) => { // We respond to POST request to '/webhook' as follows
   try {
-    // console.log(req.body.events);
     const agent = new WebhookClient({request: req, response: res});
 
-    //Test get value of WebhookClient
     let reqdata = agent.originalRequest;
     /* console.log('agentVersion: ' + agent.agentVersion);
     console.log('originalRequest: ' + JSON.stringify(reqdata)); */
@@ -40,6 +42,9 @@ parameters: ${JSON.stringify(agent.parameters)}`);
     let userText = '[Event type is not message]';
     if (event.type === "message") userText = event.message.type === "text" ? event.message.text : `[Message type is '${event.message.type}']`; */
 
+    /**
+     * Here, we respond to the matched intents by functions that is described in 'intent.js' file.
+     */
     let intentMap = new Map();
     intentMap.set('Default Welcome Intent', intent.welcome(agent));
     intentMap.set('Default Fallback Intent', intent.fallback(agent));
@@ -50,6 +55,9 @@ parameters: ${JSON.stringify(agent.parameters)}`);
     }
     await agent.handleRequest(intentMap);
 
+    /**
+     * if messages come from LINE, we should keep them in DB as well.
+     */
     if (reqdata.source == 'line') await db.collection('Messages').doc().set({
       userId: reqdata.payload.data.source.userId,
       message: reqdata.payload.data.message.text,
@@ -60,7 +68,7 @@ parameters: ${JSON.stringify(agent.parameters)}`);
       parameters: agent.parameters,
     });
 
-  } catch (err) {
+  } catch (err) { // just the dumbass useless error catch
     return next(err);
   }
 });

@@ -1,3 +1,7 @@
+/**
+ * The main server file. App Engine run their process by run this file (as described in 'package.json' scripts->start)
+ */
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
