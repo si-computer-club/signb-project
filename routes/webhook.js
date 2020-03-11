@@ -24,8 +24,6 @@ router.post('/webhook', async (req, res, next) => { // We respond to POST reques
     const agent = new WebhookClient({request: req, response: res});
 
     let reqdata = agent.originalRequest;
-    /* console.log('agentVersion: ' + agent.agentVersion);
-    console.log('originalRequest: ' + JSON.stringify(reqdata)); */
     console.log(`
 intent: ${agent.intent}
 locale: ${agent.locale}
@@ -34,13 +32,6 @@ source: ${reqdata.source}
 session: ${agent.session}
 action: ${agent.action}
 parameters: ${JSON.stringify(agent.parameters)}`);
-
-    /* let event = req.body.events[0];
-    let userId = event.source.userId;
-    let timestamp = event.timestamp;
-    let replyToken = event.replyToken;
-    let userText = '[Event type is not message]';
-    if (event.type === "message") userText = event.message.type === "text" ? event.message.text : `[Message type is '${event.message.type}']`; */
 
     /**
      * Here, we respond to the matched intents by functions that is described in 'intent.js' file.
@@ -68,7 +59,7 @@ parameters: ${JSON.stringify(agent.parameters)}`);
       parameters: agent.parameters,
     });
 
-  } catch (err) { // just the dumbass useless error catch
+  } catch (err) {
     return next(err);
   }
 });

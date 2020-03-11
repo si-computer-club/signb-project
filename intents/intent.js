@@ -1,7 +1,7 @@
 /**
  * This file is used to manage proper response to matched intent.
  * The main concept is at 'intents' object. It has functions that 
- * receives WebhookClient (as agent) and used it to response messages.
+ * receives WebhookClient (as 'agent') and used it to response messages.
  */
 
 const { name: projectId } = require('../package.json');
@@ -21,6 +21,7 @@ const intents = module.exports =  {
 
   test: agent => agent.add('testtest'),
 
+  // With 'birthday - yes' intent, we save birthday data to Firestore.
   'birthday - yes': async (agent, userId) => {
     let bd;
     agent.contexts.forEach(e => {
@@ -31,7 +32,6 @@ const intents = module.exports =  {
     });
     agent.add('บันทึกข้อมูลสำเร็จ');
   },
-  // With 'birthday - yes' intent, we save birthday data to Firestore.
   
   profile: async (agent, userId) => {
     let user = await db.collection('Users').doc(userId).get();
