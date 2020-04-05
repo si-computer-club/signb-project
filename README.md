@@ -8,6 +8,7 @@ This is a main reposity for Siriraj Computer Club gynecology chatbot project. Pr
 - [Node.js](https://nodejs.org/en/) (LTS version is recommended)
 - [npm](https://www.npmjs.com/)
 - [Google Cloud](https://cloud.google.com/) account (Gmail account)
+- [ngrok](https://ngrok.com/)
 
 ### Installation
 1. Make sure all the prerequisites are installed.
@@ -21,6 +22,16 @@ This is a main reposity for Siriraj Computer Club gynecology chatbot project. Pr
 1. Set the [environment variable](https://cloud.google.com/docs/authentication/getting-started#setting_the_environment_variable) every time before run server.
 1. (Optional) You can use [shortcut](https://superuser.com/a/1276344) to predefine the environment variable (for example, my shortcut script in `Target` field is: `C:\Windows\System32\cmd.exe /k "set GOOGLE_APPLICATION_CREDENTIALS=.\secret\[MY SERVICE ACCOUNT FILE].json&&cd [MY PROJECT FOLDER]"`) and set to always run as administrator.
 1. `npm run dev`.
+
+### Test server in your local machine
+1. Setup ngrok. Maybe this [tutorial](https://medium.com/linedevth/linebot-ngrok-b319841a49d7) will help. (__For ngrok only, skip the LINE webhook section__, as we will set dialogflow webhook instead)
+1. Point Dialogflow Fulfillment webhook URL to your tunnel URL, append `/webhook`.
+1. `npm run dev`.
+1. Don't forget to change webhook back to original URL. (Should be like: `https://signb-project.appspot.com/webhook`)
+
+### Build pages and deploy for production usage
+1. `npm run build`.
+1. `npm run deploy`, `y`.
 
 ### Here is a brief description of main files/folders in this repository
 - `package.json` is the JSON file that contain configurations of our project, such as script commands and dependency lists.
@@ -51,3 +62,6 @@ Next if you want to use git your computer I would recommend installing git ([htt
 Then I would suggest following [This tutorial](https://guides.github.com/activities/hello-world/) to get a basic understanding of git workflow.
 
 More information can be found in **[https://help.github.com/en/github/getting-started-with-github](https://help.github.com/en/github/getting-started-with-github)**
+
+## License
+MIT - see [details](https://github.com/jewkub/signb-project/blob/master/LICENSE)

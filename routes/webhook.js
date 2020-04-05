@@ -15,6 +15,10 @@ const db = new Firestore({
 const { WebhookClient } = require('dialogflow-fulfillment');
 const intent = require('../intents/intent.js');
 
+router.post('/', async (req, res, next) => {
+  res.send('ok');
+});
+
 router.get('/webhook', async (req, res, next) => {
   res.send('ok');
 });
