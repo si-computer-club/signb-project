@@ -19,7 +19,7 @@ const port = +process.env.PORT || 8080, ip = process.env.IP || '0.0.0.0';
 
   // set up routes
 
-  app.use(require(__dirname + '/routes/https-redirect.js')({ httpsPort: app.get('https-port') }));
+  // app.use(require(__dirname + '/routes/https-redirect.js')({ httpsPort: app.get('https-port') })); // config in app.yaml instead
   app.set('trust proxy', true);
 
   // parse application/x-www-form-urlencoded
