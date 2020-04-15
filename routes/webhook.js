@@ -45,14 +45,14 @@ parameters: ${JSON.stringify(agent.parameters)}`);
     intentMap.set('Default Fallback Intent', intent.fallback(agent));
     intentMap.set('test', intent.test(agent));
     if (reqdata.source == 'line') {
-      intentMap.set('birthday - yes', intent['birthday - yes'](agent, reqdata.payload.data.source.userId));
+      intentMap.set('birthday - yes', intent.birthday(agent, reqdata.payload.data.source.userId));
       intentMap.set('profile', intent.profile(agent, reqdata.payload.data.source.userId));
+      intentMap.set('name', intent.name(agent, reqdata.payload.data.source.userId));
+      intentMap.set('menses', intent.menses(agent, reqdata.payload.data.source.userId));
     }
     await agent.handleRequest(intentMap);
 
-    /**
-     * if messages come from LINE, we should keep them in DB as well.
-     */
+    /*
     if (reqdata.source == 'line') await db.collection('Messages').doc().set({
       userId: reqdata.payload.data.source.userId,
       message: reqdata.payload.data.message.text,
@@ -61,7 +61,7 @@ parameters: ${JSON.stringify(agent.parameters)}`);
       locale: agent.locale,
       action: agent.action,
       parameters: agent.parameters,
-    });
+    }); */
 
   } catch (err) {
     return next(err);

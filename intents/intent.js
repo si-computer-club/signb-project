@@ -12,6 +12,8 @@ const db = new Firestore({
   projectId,
 });
 
+const OTP = require('../models/otp.js');
+
 const wrapper = f => ( (...agent) => ( async () => f(...agent) ) );
 
 const intents = module.exports =  {
@@ -22,7 +24,7 @@ const intents = module.exports =  {
   test: agent => agent.add('testtest'),
 
   // With 'birthday - yes' intent, we save birthday data to Firestore.
-  'birthday - yes': async (agent, userId) => {
+  birthday: async (agent, userId) => {
     let bd;
     agent.contexts.forEach(e => {
       if (e.name == 'birthday-followup') bd = e.parameters.birthday;
@@ -32,14 +34,44 @@ const intents = module.exports =  {
     });
     agent.add('บันทึกข้อมูลสำเร็จ');
   },
+
+  name: async (agent, userId) => {
+    let name;
+    agent.contexts.forEach(e => {
+      if (e.name == 'name-followup') name = e.parameters.name;
+    });
+    await db.collection('Users').doc(userId).set({
+      name: name
+    });
+    agent.add('บันทึกข้อมูลสำเร็จ');
+  },
+
+  menses: async (agent, userId) => {
+    let grade;
+    agent.contexts.forEach(e => {
+      if (e.name == 'menses-followup') grade = e.parameters.grade;
+    });
+    let today = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    await db.collection('Users').doc(userId).collection('Menses').add({
+      date: today,
+      grade,
+    });
+    agent.add('บันทึกข้อมูลสำเร็จ');
+  },
   
   profile: async (agent, userId) => {
     let user = await db.collection('Users').doc(userId).get();
     agent.add(
 `ข้อมูลของคุณ
 วันเกิด - ${moment(user.get('birthday')).format('dddd, MMMM Do YYYY')}
+อายุ - ${moment(user.get('birthday')).diff(moment(), 'years')}
 (... อื่นๆ กำลังตามมา)`);
   },
+
+  otp: async (agent, userId) => {
+    let otpRef = await OTP.createToken(db.collection('Users').doc(userId));
+    return otpRef.id;
+  }
 };
 
 for (let k in intents) {

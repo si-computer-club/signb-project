@@ -33,6 +33,7 @@ const port = +process.env.PORT || 8080, ip = process.env.IP || '0.0.0.0';
 
   app.use('/', require('./routes/debug.js'));
   app.use('/', require('./routes/webhook.js'));
+  app.use('/', require('./routes/visualize.js'));
   app.get('*', (req, res) => nextApp.getRequestHandler()(req, res));
 
   app.use((err, req, res, next) => {
