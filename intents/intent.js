@@ -16,6 +16,8 @@ const OTP = require('../models/otp.js');
 
 const wrapper = f => ( (...agent) => ( async () => f(...agent) ) );
 
+const line = str => str.split('\n').map(e => e.trimStart()).join('\n');
+
 const intents = module.exports =  {
   welcome: agent => agent.add('welcome jaa'), // This line indicate that with 'welcome' intents, we send a response message as that text.
 
@@ -61,19 +63,23 @@ const intents = module.exports =  {
   
   profile: async (agent, userId) => {
     let user = await db.collection('Users').doc(userId).get();
-    agent.add(
-`ข้อมูลของคุณ
-วันเกิด - ${moment(user.get('birthday')).format('dddd, MMMM Do YYYY')}
-อายุ - ${moment(user.get('birthday')).diff(moment(), 'years')}
-(... อื่นๆ กำลังตามมา)`);
+    agent.add(line(`ข้อมูลของคุณ
+      วันเกิด - ${moment(user.get('birthday')).format('dddd, MMMM Do YYYY')}
+      อายุ - ${moment(user.get('birthday')).diff(moment(), 'years')}
+      (... อื่นๆ กำลังตามมา)`));
   },
 
   otp: async (agent, userId) => {
-    let otpRef = await OTP.createToken(db.collection('Users').doc(userId));
-    return otpRef.id;
-  }
+    let otp = await OTP.createToken(db.collection('Users').doc(userId));
+    agent.add(
+`⚠️ โปรดอ่านข้อตกลงที่ลิ้งค์ด้านล่างก่อนยินยอมแจ้งรหัสแก่แพทย์ ⚠️
+[LINK]
+***รหัสสำหรับการเข้าถึงข้อมูลคือ***
+${otp}`);
+    return otp;
+  },
 };
-
+ 
 for (let k in intents) {
   intents[k] = wrapper(intents[k]);
 }

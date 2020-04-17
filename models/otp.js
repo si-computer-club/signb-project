@@ -6,6 +6,7 @@ const db = new Firestore({
   projectId,
 });
 
+const InputError = require('./error');
 const Menses = require('./menses');
 const User = require('./user');
 
@@ -27,13 +28,13 @@ OTP.createToken = async function (userRef) {
     otp: ref.id,
     created: +new Date()
   });
-  return ref;
+  return ref.id;
 };
 
 OTP.activate = async function (token) {
   let data = await db.collection('OTP').doc(token).get();
-  if (!data.exists) return false;
-  if (moment().isAfter(moment(data.get('created')).add(30, 'm'))) return false;
+  if (!data.exists) throw new InputError('Incorrect OTP');
+  if (moment().isAfter(moment(data.get('created')).add(30, 'm'))) throw new InputError('OTP expired');
 
   let user = new User(data.get('user'));
 

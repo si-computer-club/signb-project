@@ -6,6 +6,7 @@ const db = new Firestore({
   projectId,
 });
 
+const InputError = require('./error');
 const Menses = require('./menses');
 
 class User {
@@ -19,9 +20,12 @@ class User {
   }
 
   async getData() {
-    let user = await this.userRef.get();
+    let user = (await this.userRef.get()).data();
     let menses = await this.userRef.collection('Menses').get();
-    user.menses = menses.docs;
+    user.menses = [];
+    menses.docs.forEach((e, i) => {
+      user.menses[i] = e.data();
+    });
     return user;
   }
 }

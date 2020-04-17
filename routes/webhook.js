@@ -49,6 +49,7 @@ parameters: ${JSON.stringify(agent.parameters)}`);
       intentMap.set('profile', intent.profile(agent, reqdata.payload.data.source.userId));
       intentMap.set('name', intent.name(agent, reqdata.payload.data.source.userId));
       intentMap.set('menses', intent.menses(agent, reqdata.payload.data.source.userId));
+      intentMap.set('otp', intent.otp(agent, reqdata.payload.data.source.userId));
     }
     await agent.handleRequest(intentMap);
 

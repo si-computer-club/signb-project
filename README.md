@@ -1,6 +1,6 @@
 # SI-GyneBot
 ### Welcome to signb-project repository
-This is a main reposity for Siriraj Computer Club gynecology chatbot project. Primary goal of this project is to create a chatbot capable of recording user menstual cycle data as well as a webapp capable of providing user data to clinician upon requesting and approval from patient.
+This is a main repository for Siriraj Computer Club gynecology chatbot project. Primary goal of this project is to create a chatbot capable of recording user menstual cycle data as well as a webapp capable of providing user data to clinician upon requesting and approval from patient.
 
 ## Getting Started
 
@@ -13,8 +13,7 @@ This is a main reposity for Siriraj Computer Club gynecology chatbot project. Pr
 
 ### Installation
 1. Make sure all the prerequisites are installed.
-1. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork) this repo.
-1. [Clone](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork) your forked repository into your local computer.
+1. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork) this repo and clone into your local computer.
 1. Run `npm install` in your clone folder.
 
 ### Get the User Role and Permission in Google Cloud Platform
