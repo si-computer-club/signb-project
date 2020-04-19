@@ -1,6 +1,6 @@
 # SI-GyneBot
 ### Welcome to signb-project repository
-This is a main reposity for Siriraj Computer Club gynecology chatbot project. Primary goal of this project is to create a chatbot capable of recording user menstual cycle data as well as a webapp capable of providing user data to clinician upon requesting and approval from patient.
+This is a main repository for Siriraj Computer Club gynecology chatbot project. Primary goal of this project is to create a chatbot capable of recording user menstual cycle data as well as a webapp capable of providing user data to clinician upon requesting and approval from patient.
 
 ## Getting Started
 
@@ -8,12 +8,12 @@ This is a main reposity for Siriraj Computer Club gynecology chatbot project. Pr
 - [Node.js](https://nodejs.org/en/) (LTS version is recommended)
 - [npm](https://www.npmjs.com/)
 - [Google Cloud](https://cloud.google.com/) account (Gmail account)
+- [Google Cloud SDK](https://cloud.google.com/sdk/docs/quickstarts)
 - [ngrok](https://ngrok.com/)
 
 ### Installation
 1. Make sure all the prerequisites are installed.
-1. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork) this repo.
-1. [Clone](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork) your forked repository into your local computer.
+1. [Fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork) this repo and clone into your local computer.
 1. Run `npm install` in your clone folder.
 
 ### Get the User Role and Permission in Google Cloud Platform
@@ -21,10 +21,9 @@ This is a main reposity for Siriraj Computer Club gynecology chatbot project. Pr
 1. Create Google Cloud [Service Account](https://cloud.google.com/docs/authentication/getting-started#creating_a_service_account) and download to your project folder inside `/secret/` folder (or any folder that will not be committed).
 1. Set the [environment variable](https://cloud.google.com/docs/authentication/getting-started#setting_the_environment_variable) every time before run server.
 1. (Optional) You can use [shortcut](https://superuser.com/a/1276344) to predefine the environment variable (for example, my shortcut script in `Target` field is: `C:\Windows\System32\cmd.exe /k "set GOOGLE_APPLICATION_CREDENTIALS=.\secret\[MY SERVICE ACCOUNT FILE].json&&cd [MY PROJECT FOLDER]"`) and set to always run as administrator.
-1. `npm run dev`.
 
 ### Test server in your local machine
-1. Setup ngrok. Maybe this [tutorial](https://medium.com/linedevth/linebot-ngrok-b319841a49d7) will help. (__For ngrok only, skip the LINE webhook section__, as we will set dialogflow webhook instead)
+1. Setup ngrok. Maybe this [tutorial](https://medium.com/linedevth/linebot-ngrok-b319841a49d7) will help. (__In 'section 2. ngrok' only, skip the LINE webhook section__, as we will set dialogflow webhook instead)
 1. Point Dialogflow Fulfillment webhook URL to your tunnel URL, append `/webhook`.
 1. `npm run dev`.
 1. Don't forget to change webhook back to original URL. (Should be like: `https://signb-project.appspot.com/webhook`)

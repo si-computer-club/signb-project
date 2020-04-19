@@ -35,7 +35,7 @@ class App extends React.Component {
     return (
       <>
         <Head>
-          <meta charset="utf-8"/>
+          <meta charSet="utf-8"/>
           <title>Title</title>
           <meta name="description" content=""/>
         </Head>
