@@ -25,16 +25,32 @@ const intents = module.exports =  {
 
   test: agent => agent.add('testtest'),
 
-  // With 'birthday - yes' intent, we save birthday data to Firestore.
-  birthday: async (agent, userId) => {
+  /* birthday: async (agent, userId) => {
     let bd;
     agent.contexts.forEach(e => {
       if (e.name == 'birthday-followup') bd = e.parameters.birthday;
     });
+    
+    agent.add('บันทึกข้อมูลสำเร็จ');
+
+  }, */
+
+  birthday: async (agent, userId) => {
+    let bd = agent.parameters.birthday;
+    agent.context.set('confirm-age', 3, { birthday: bd });
+    agent.add(`วันเกิดของคุณคือ ${moment(bd).format('dddd, MMMM Do YYYY')} ขณะนี้คุณอายุ ${moment().diff(moment(bd), 'years')} ถูกต้องไหมคะ`);
+  },
+
+  'confirm age': async (agent, userId) => {
+    let bd;
+    agent.contexts.forEach(e => {
+      if (e.name == 'confirm-age') bd = e.parameters.birthday;
+    });
     await db.collection('Users').doc(userId).set({
       birthday: bd
     });
-    agent.add('บันทึกข้อมูลสำเร็จ');
+    agent.add('บันทึกสำเร็จ');
+    agent.clearOutgoingContexts();
   },
 
   name: async (agent, userId) => {
@@ -46,6 +62,7 @@ const intents = module.exports =  {
       name: name
     });
     agent.add('บันทึกข้อมูลสำเร็จ');
+    agent.clearOutgoingContext();
   },
 
   menses: async (agent, userId) => {
@@ -63,7 +80,8 @@ const intents = module.exports =  {
   
   profile: async (agent, userId) => {
     let user = await db.collection('Users').doc(userId).get();
-    agent.add(line(`ข้อมูลของคุณ
+    agent.add(line(
+      `ข้อมูลของคุณ
       วันเกิด - ${moment(user.get('birthday')).format('dddd, MMMM Do YYYY')}
       อายุ - ${moment(user.get('birthday')).diff(moment(), 'years')}
       (... อื่นๆ กำลังตามมา)`));

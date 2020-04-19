@@ -105,3 +105,6 @@ dist
 
 # Secret files
 /secret/
+
+#test
+/test.js

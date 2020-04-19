@@ -45,11 +45,13 @@ parameters: ${JSON.stringify(agent.parameters)}`);
     intentMap.set('Default Fallback Intent', intent.fallback(agent));
     intentMap.set('test', intent.test(agent));
     if (reqdata.source == 'line') {
-      intentMap.set('birthday - yes', intent.birthday(agent, reqdata.payload.data.source.userId));
-      intentMap.set('profile', intent.profile(agent, reqdata.payload.data.source.userId));
-      intentMap.set('name', intent.name(agent, reqdata.payload.data.source.userId));
-      intentMap.set('menses', intent.menses(agent, reqdata.payload.data.source.userId));
-      intentMap.set('otp', intent.otp(agent, reqdata.payload.data.source.userId));
+      const userId = reqdata.payload.data.source.userId;
+      intentMap.set('get birthdate', intent.birthday(agent, userId));
+      intentMap.set('confirm age', intent['confirm age'](agent, userId));
+      intentMap.set('profile', intent.profile(agent, userId));
+      intentMap.set('name', intent.name(agent, userId));
+      intentMap.set('menses', intent.menses(agent, userId));
+      intentMap.set('get pin', intent.otp(agent, userId));
     }
     await agent.handleRequest(intentMap);
 
