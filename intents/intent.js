@@ -96,6 +96,11 @@ const intents = module.exports =  {
 ${otp}`);
     return otp;
   },
+
+  'edit - birthdate': async (agent, userId) => {
+    agent.setFollowupEvent('birthday');
+    agent.add('คุณต้องการเปลี่ยน วัน/เดือน/ปีเกิด เป็นวันที่เท่าไหร่คะ');
+  },
 };
  
 for (let k in intents) {
