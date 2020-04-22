@@ -24,8 +24,9 @@ class User {
     let menses = await this.userRef.collection('Menses').get();
     user.menses = [];
     menses.docs.forEach((e, i) => {
-      user.menses[i] = e.data();
+      user.menses.push(e.data());
     });
+    user.menses.map = Menses.map;
     return user;
   }
 }

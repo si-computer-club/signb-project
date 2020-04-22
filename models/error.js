@@ -8,9 +8,7 @@ class InputError extends Error {
     super (...params);
 
     // Maintains proper stack trace for where our error was thrown (only available on V8)
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, InputError);
-    }
+    if (Error.captureStackTrace) Error.captureStackTrace(this, InputError);
 
     this.name = 'InputError';
     this.date = new Date();

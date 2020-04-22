@@ -104,7 +104,8 @@ dist
 .tern-port
 
 # Secret files
-/secret/
+/secret/*
+!/secret/*.example
 
 #test
 /test.js
