@@ -2,7 +2,7 @@
  * This file is used to manage routes that come from webhook from Dialogflow.
  */
 
-const request = require('request');
+const fetch = require('node-fetch');
 const express = require('express');
 const router = express.Router();
 const { name: projectId } = require('../package.json');
@@ -21,6 +21,27 @@ router.post('/', async (req, res, next) => {
 
 router.get('/webhook', async (req, res, next) => {
   res.send('ok');
+});
+
+router.post('/webhook/line', async (req, res, next) => {
+  let event = req.body.events[0];
+  if (event.type === "message" && event.message.type === "text") {
+    req.headers.host = "dialogflow.cloud.google.com";
+    await fetch('https://dialogflow.cloud.google.com/v1/integrations/line/webhook/c5cf1f15-6655-4c57-b12e-05907201774a', {
+      method: 'post',
+      headers: req.headers,
+      body: JSON.stringify(req.body),
+    });
+    res.send('ok');
+    /* return request.post({
+      uri: "https://bots.dialogflow.com/line/<Your-Agent-ID>/webhook",
+      headers: req.headers,
+      body: JSON.stringify(req.body)
+    }); */
+  }
+  else {
+    // reply(req);
+  }
 });
 
 router.post('/webhook', async (req, res, next) => { // We respond to POST request to '/webhook' as follows
@@ -50,7 +71,9 @@ parameters: ${JSON.stringify(agent.parameters)}`);
       intentMap.set('confirm age', intent['confirm age'](agent, userId));
       intentMap.set('profile', intent.profile(agent, userId));
       intentMap.set('name', intent.name(agent, userId));
-      intentMap.set('menses', intent.menses(agent, userId));
+      intentMap.set('menstruation (y/n) - yes - light', intent.menses(agent, userId, 1));
+      intentMap.set('menstruation (y/n) - yes - normal', intent.menses(agent, userId, 2));
+      intentMap.set('menstruation (y/n) - yes - heavy', intent.menses(agent, userId, 3));
       intentMap.set('get pin', intent.otp(agent, userId));
     }
     await agent.handleRequest(intentMap);

@@ -15,15 +15,31 @@ const line = new Line.Client({
 const OTP = require('../models/otp');
 const User = require('../models/user');
 
+// let jew = 'U283cce492091fb358cc954922461780e';
+
 router.get('/cron/menses', async (req, res, next) => {
   try {
     let users = (await db.collection('Users').get()).docs;
     users.forEach(async (e, i) => {
       await line.pushMessage(e.ref.id, {
-        type: 'text',
-        text: 'วันนี้มีประจำเดือนไหมคะ',
+        type: 'template',
+        altText: 'confirm template',
+        template: {
+          type: 'confirm',
+          text: 'วันนี้คุณมีประจำเดือนไหมคะ',
+          actions: [ {
+            type: 'message',
+            label: 'มี',
+            text: 'วันนี้มีประจำเดือน'
+          }, {
+            type: 'message',
+            label: 'ไม่มี',
+            text: 'วันนี้ไม่มีประจำเดือน'
+          } ]
+        }
       });
     });
+    res.send('ok');
   } catch (e) {
     return next(e);
   }

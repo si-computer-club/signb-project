@@ -1,5 +1,8 @@
 const { name: projectId } = require('../package.json');
-const moment = require('moment');
+
+const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Bangkok');
+moment.locale('th');
 
 const Firestore = require('@google-cloud/firestore');
 const db = new Firestore({

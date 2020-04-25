@@ -1,5 +1,5 @@
 cron:
 - description: "daily query for menses"
   url: /cron/menses
-  schedule: every day 18:45
+  schedule: every day 17:00
   timezone: Asia/Bangkok

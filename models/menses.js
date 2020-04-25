@@ -1,5 +1,8 @@
 const { name: projectId } = require('../package.json');
-const moment = require('moment');
+
+const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Bangkok');
+moment.locale('th');
 
 const Firestore = require('@google-cloud/firestore');
 const db = new Firestore({
@@ -9,10 +12,10 @@ const db = new Firestore({
 class Menses {
   static get map () {
     return ({
-      0: 'none',
-      1: 'light',
-      2: 'moderate',
-      3: 'heavy',
+      0: 'ไม่มี',
+      1: 'น้อย',
+      2: 'ปานกลาง',
+      3: 'มาก',
     });
   };
 

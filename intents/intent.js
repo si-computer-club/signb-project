@@ -5,14 +5,20 @@
  */
 
 const { name: projectId } = require('../package.json');
-const moment = require('moment');
+
+const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Bangkok');
+moment.locale('th');
 
 const Firestore = require('@google-cloud/firestore');
 const db = new Firestore({
   projectId,
 });
 
+const { RichResponse, Payload } = require('dialogflow-fulfillment');
+
 const OTP = require('../models/otp.js');
+const Menses = require('../models/menses');
 
 const wrapper = f => ( (...agent) => ( async () => f(...agent) ) );
 
@@ -38,7 +44,30 @@ const intents = module.exports =  {
   birthday: async (agent, userId) => {
     let bd = agent.parameters.birthday;
     agent.context.set('confirm-age', 3, { birthday: bd });
-    agent.add(`วันเกิดของคุณคือ ${moment(bd).format('dddd, MMMM Do YYYY')} ขณะนี้คุณอายุ ${moment().diff(moment(bd), 'years')} ถูกต้องไหมคะ`);
+    let response = new Payload('LINE', {
+      "type": "template",
+      "altText": "confirm",
+      "template": {
+        "type": "confirm",
+        "text": `วันเกิดของคุณคือ ${moment(bd).format('วันddddที่ DD MMMM YYYY')} ขณะนี้คุณอายุ ${moment().diff(moment(bd), 'years')} ถูกต้องไหมคะ`,
+        "actions": [
+          {
+            "type": "message",
+            "label": "ใช่",
+            "text": "ใช่"
+          },
+          {
+            "type": "message",
+            "label": "ไม่ใช่",
+            "text": "ไม่ใช่"
+          }
+        ]
+      }
+    }, {
+      sendAsMessage: true,
+      rawPayload: false,
+    });
+    agent.add(response);
   },
 
   'confirm age': async (agent, userId) => {
@@ -65,17 +94,13 @@ const intents = module.exports =  {
     agent.clearOutgoingContext();
   },
 
-  menses: async (agent, userId) => {
-    let grade;
-    agent.contexts.forEach(e => {
-      if (e.name == 'menses-followup') grade = e.parameters.grade;
-    });
+  menses: async (agent, userId, grade) => {
     let today = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     await db.collection('Users').doc(userId).collection('Menses').add({
       date: today,
       grade,
     });
-    agent.add('บันทึกข้อมูลสำเร็จ');
+    agent.add(`${moment().format('วันddddที่ DD MMMM')} คุณมีประจำเดือนปริมาณ ${Menses.map[grade]} บันทึกข้อมูลสำเร็จ`);
   },
   
   profile: async (agent, userId) => {
@@ -92,7 +117,7 @@ const intents = module.exports =  {
     agent.add(
 `⚠️ โปรดอ่านข้อตกลงที่ลิ้งค์ด้านล่างก่อนยินยอมแจ้งรหัสแก่แพทย์ ⚠️
 [LINK]
-***รหัสสำหรับการเข้าถึงข้อมูลคือ***
+*รหัสสำหรับการเข้าถึงข้อมูลคือ*
 ${otp}`);
     return otp;
   },
