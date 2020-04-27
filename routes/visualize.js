@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const router = express.Router();
 const { name: projectId } = require('../package.json');
 
@@ -26,7 +27,7 @@ router.get('/visualize/otp/create', async (req, res, next) => {
   }
 });
 
-router.post('/visualize/otp/activate', async (req, res, next) => {
+router.post('/visualize/otp/activate', cors(), async (req, res, next) => {
   try {
     let data = await OTP.activate(req.body.token);
     console.log(data.menses[0].date.toDate());

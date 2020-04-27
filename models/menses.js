@@ -19,16 +19,17 @@ class Menses {
     });
   };
 
-  constructor (mensesRef, grade) {
+  constructor (mensesRef, grade, date) {
     if (!Menses.map[grade]) throw new Error('Invalid grade, must be 0, 1, 2 or 3');
 
     this.mensesRef = mensesRef;
     this.grade = grade;
+    this.date = date || moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
   }
 
   async save() {
     return await this.mensesRef.set({
-      date: moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }),
+      date: this.date,
       grade: this.grade,
     });
   }

@@ -33,18 +33,13 @@ router.post('/webhook/line', async (req, res, next) => {
       body: JSON.stringify(req.body),
     });
     res.send('ok');
-    /* return request.post({
-      uri: "https://bots.dialogflow.com/line/<Your-Agent-ID>/webhook",
-      headers: req.headers,
-      body: JSON.stringify(req.body)
-    }); */
   }
   else {
-    // reply(req);
+    res.send('ok');
   }
 });
 
-router.post('/webhook', async (req, res, next) => { // We respond to POST request to '/webhook' as follows
+router.post('/webhook/dialogflow', async (req, res, next) => { // We respond to POST request to '/webhook' as follows
   try {
     const agent = new WebhookClient({request: req, response: res});
 
@@ -64,10 +59,9 @@ parameters: ${JSON.stringify(agent.parameters)}`);
     let intentMap = new Map();
     intentMap.set('Default Welcome Intent', intent.welcome(agent));
     intentMap.set('Default Fallback Intent', intent.fallback(agent));
-    intentMap.set('test', intent.test(agent));
     if (reqdata.source == 'line') {
       const userId = reqdata.payload.data.source.userId;
-      intentMap.set('get birthdate', intent.birthday(agent, userId));
+      intentMap.set('get birthdate', intent.birthdate(agent, userId));
       intentMap.set('confirm age', intent['confirm age'](agent, userId));
       intentMap.set('profile', intent.profile(agent, userId));
       intentMap.set('name', intent.name(agent, userId));

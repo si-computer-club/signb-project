@@ -19,6 +19,7 @@ const { RichResponse, Payload } = require('dialogflow-fulfillment');
 
 const OTP = require('../models/otp.js');
 const Menses = require('../models/menses');
+const User = require('../models/user');
 
 const wrapper = f => ( (...agent) => ( async () => f(...agent) ) );
 
@@ -29,21 +30,9 @@ const intents = module.exports =  {
 
   fallback: agent => agent.add('i dont know this word'),
 
-  test: agent => agent.add('testtest'),
-
-  /* birthday: async (agent, userId) => {
-    let bd;
-    agent.contexts.forEach(e => {
-      if (e.name == 'birthday-followup') bd = e.parameters.birthday;
-    });
-    
-    agent.add('บันทึกข้อมูลสำเร็จ');
-
-  }, */
-
-  birthday: async (agent, userId) => {
-    let bd = agent.parameters.birthday;
-    agent.context.set('confirm-age', 3, { birthday: bd });
+  birthdate: async (agent, userId) => {
+    let bd = agent.parameters.birthdate;
+    agent.context.set('confirm-age', 3, { birthdate: bd });
     let response = new Payload('LINE', {
       "type": "template",
       "altText": "confirm",
@@ -73,10 +62,10 @@ const intents = module.exports =  {
   'confirm age': async (agent, userId) => {
     let bd;
     agent.contexts.forEach(e => {
-      if (e.name == 'confirm-age') bd = e.parameters.birthday;
+      if (e.name == 'confirm-age') bd = e.parameters.birthdate;
     });
     await db.collection('Users').doc(userId).set({
-      birthday: bd
+      birthdate: bd
     });
     agent.add('บันทึกสำเร็จ');
     agent.clearOutgoingContexts();
@@ -95,20 +84,22 @@ const intents = module.exports =  {
   },
 
   menses: async (agent, userId, grade) => {
-    let today = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    await db.collection('Users').doc(userId).collection('Menses').add({
-      date: today,
-      grade,
-    });
-    agent.add(`${moment().format('วันddddที่ DD MMMM')} คุณมีประจำเดือนปริมาณ ${Menses.map[grade]} บันทึกข้อมูลสำเร็จ`);
+    try {
+      // let today = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+      let u = new User(db.collection('Users').doc(userId));
+      await u.addMenses(grade);
+      agent.add(`${moment().format('วันddddที่ DD MMMM')} คุณมีประจำเดือนปริมาณ ${Menses.map[grade]} บันทึกข้อมูลสำเร็จ`);
+    } catch (e) {
+      return next(err);
+    }
   },
   
   profile: async (agent, userId) => {
     let user = await db.collection('Users').doc(userId).get();
     agent.add(line(
       `ข้อมูลของคุณ
-      วันเกิด - ${moment(user.get('birthday')).format('dddd, MMMM Do YYYY')}
-      อายุ - ${moment(user.get('birthday')).diff(moment(), 'years')}
+      วันเกิด - ${moment(user.get('birthdate')).format('dddd, MMMM Do YYYY')}
+      อายุ - ${moment(user.get('birthdate')).diff(moment(), 'years')}
       (... อื่นๆ กำลังตามมา)`));
   },
 
@@ -119,11 +110,12 @@ const intents = module.exports =  {
 [LINK]
 *รหัสสำหรับการเข้าถึงข้อมูลคือ*
 ${otp}`);
+    agent.clearOutgoingContexts();
     return otp;
   },
 
   'edit - birthdate': async (agent, userId) => {
-    agent.setFollowupEvent('birthday');
+    agent.setFollowupEvent('birthdate');
     agent.add('คุณต้องการเปลี่ยน วัน/เดือน/ปีเกิด เป็นวันที่เท่าไหร่คะ');
   },
 };

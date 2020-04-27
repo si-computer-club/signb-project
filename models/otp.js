@@ -29,7 +29,7 @@ OTP.createToken = async function (userRef) {
   await ref.create({
     user: userRef,
     otp: ref.id,
-    created: +new Date()
+    created: new Date()
   });
   return ref.id;
 };

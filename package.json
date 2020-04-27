@@ -29,6 +29,7 @@
     "actions-on-google": "^2.12.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.4.1",
+    "cors": "^2.8.5",
     "dialogflow": "^1.2.0",
     "dialogflow-fulfillment": "^0.6.1",
     "express": "^4.17.1",
@@ -38,7 +39,6 @@
     "node-fetch": "^2.6.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
-    "react-dom": "^16.13.1",
-    "request": "^2.88.2"
+    "react-dom": "^16.13.1"
   }
 }

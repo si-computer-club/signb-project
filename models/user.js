@@ -1,5 +1,11 @@
 const { name: projectId } = require('../package.json');
 
+const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Bangkok');
+moment.locale('th');
+
+const today = () => moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+
 const Firestore = require('@google-cloud/firestore');
 const db = new Firestore({
   projectId,
@@ -13,9 +19,19 @@ class User {
     this.userRef = userRef;
   }
   
-  async addMenses(grade) {
-    let menses = new Menses(this.userRef.collection('Menses').doc(), grade);
+  async addMenses(grade, date = today()) {
+    let prev = await this.userRef.collection('Menses').where('date', '=', date.toDate()).get();
+    let menses;
+    // console.log(prev.docs);
+    if (!prev.empty) menses = new Menses(prev.docs[0].ref, grade);
+    else menses = new Menses(this.userRef.collection('Menses').doc(), grade);
     return await menses.save();
+  }
+
+  async getMenses(date = today()) {
+    let menses = await this.userRef.collection('Menses').where('date', '=', date).get();
+    if (menses.empty) return null;
+    return menses.docs[0];
   }
 
   async getData() {

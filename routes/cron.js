@@ -21,6 +21,8 @@ router.get('/cron/menses', async (req, res, next) => {
   try {
     let users = (await db.collection('Users').get()).docs;
     users.forEach(async (e, i) => {
+      let user = new User(e.ref);
+      if (user.getMenses()) return;
       await line.pushMessage(e.ref.id, {
         type: 'template',
         altText: 'confirm template',
