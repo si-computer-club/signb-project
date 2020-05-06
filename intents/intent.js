@@ -22,7 +22,6 @@ const Menses = require('../models/menses');
 const User = require('../models/user');
 
 const wrapper = f => ( (...agent) => ( async () => f(...agent) ) );
-
 const line = str => str.split('\n').map(e => e.trimStart()).join('\n');
 
 const intents = module.exports =  {
@@ -31,14 +30,16 @@ const intents = module.exports =  {
   fallback: agent => agent.add('i dont know this word'),
 
   birthdate: async (agent, userId) => {
-    let bd = agent.parameters.birthdate;
+    let bd = moment(agent.parameters.birthdate);
+    if (bd.isAfter(moment())) bd = bd.subtract(43, 'y');
     agent.context.set('confirm-age', 3, { birthdate: bd });
+
     let response = new Payload('LINE', {
       "type": "template",
       "altText": "confirm",
       "template": {
         "type": "confirm",
-        "text": `วันเกิดของคุณคือ ${moment(bd).format('วันddddที่ DD MMMM YYYY')} ขณะนี้คุณอายุ ${moment().diff(moment(bd), 'years')} ถูกต้องไหมคะ`,
+        "text": `วันเกิดของคุณคือ ${bd.format('วันddddที่ D MMMM YYYY')} ขณะนี้คุณอายุ ${moment().diff(bd, 'years')} ปี ถูกต้องไหมคะ`,
         "actions": [
           {
             "type": "message",
@@ -84,21 +85,17 @@ const intents = module.exports =  {
   },
 
   menses: async (agent, userId, grade) => {
-    try {
-      // let today = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-      let u = new User(db.collection('Users').doc(userId));
-      await u.addMenses(grade);
-      agent.add(`${moment().format('วันddddที่ DD MMMM')} คุณมีประจำเดือนปริมาณ ${Menses.map[grade]} บันทึกข้อมูลสำเร็จ`);
-    } catch (e) {
-      return next(err);
-    }
+    // let today = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    let u = new User(db.collection('Users').doc(userId));
+    await u.addMenses(grade);
+    agent.add(`${moment().format('วันddddที่ D MMMM')} คุณมีประจำเดือนปริมาณ ${Menses.map[grade]} บันทึกข้อมูลสำเร็จ`);
   },
   
   profile: async (agent, userId) => {
     let user = await db.collection('Users').doc(userId).get();
     agent.add(line(
       `ข้อมูลของคุณ
-      วันเกิด - ${moment(user.get('birthdate')).format('dddd, MMMM Do YYYY')}
+      วันเกิด - ${moment(user.get('birthdate')).format('วันddddที่ D MMMM YYYY')}
       อายุ - ${moment(user.get('birthdate')).diff(moment(), 'years')}
       (... อื่นๆ กำลังตามมา)`));
   },
@@ -117,6 +114,21 @@ ${otp}`);
   'edit - birthdate': async (agent, userId) => {
     agent.setFollowupEvent('birthdate');
     agent.add('คุณต้องการเปลี่ยน วัน/เดือน/ปีเกิด เป็นวันที่เท่าไหร่คะ');
+  },
+
+  editMenses: async (agent, userId, grade) => {
+    let date;
+    agent.contexts.forEach(e => {
+      if (e.name == 'edit-menstruation-date-followup') date = e.parameters['date-time'];
+    });
+    date = moment(date).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    let oldMenses = await db.collection('Users').doc(userId).collection('Menses').where('date', '=', date.toDate()).get();
+    let newMenses
+    if (!oldMenses.empty) newMenses = new Menses(oldMenses.docs[0].ref, grade, date);
+    else newMenses = new Menses(db.collection('Users').doc(userId).collection('Menses').doc(), grade, date);
+    await newMenses.save();
+    agent.add(`${date.format('วันddddที่ D MMMM')} คุณ${!grade ? 'ไม่' : ''}มีประจำเดือน${grade ? `ปริมาณ${Menses.map[grade]}` : ''}นะคะ แก้ไขเรียบร้อยค่ะ`);
+    agent.clearOutgoingContexts();
   },
 };
  

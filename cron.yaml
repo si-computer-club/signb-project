@@ -3,3 +3,8 @@ cron:
   url: /cron/menses
   schedule: every day 17:00
   timezone: Asia/Bangkok
+
+- description: "daily clear otp"
+  url: /cron/clearotp
+  schedule: every day 00:00
+  timezone: Asia/Bangkok

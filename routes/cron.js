@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const { name: projectId } = require('../package.json');
 
+const moment = require('moment-timezone');
+moment.tz.setDefault('Asia/Bangkok');
+moment.locale('th');
+
 const Firestore = require('@google-cloud/firestore');
 const db = new Firestore({
   projectId,
@@ -9,7 +13,7 @@ const db = new Firestore({
 
 const Line = require('@line/bot-sdk');
 const line = new Line.Client({
-  channelAccessToken: '5Y57DXNBVFBCryr0iCidw7Pvm4ccUePOQrOw16zP3jKWSUdJWJuFC3YLobtNG+z0ZUdPr7hkGDEMTv0H2hIOXdy29AyOdCffjUNoDNYFb+dLtSO4r3f9nZY7kajzTH3neG5wFeGR6AAHGxz8nVS7YgdB04t89/1O/w1cDnyilFU='
+  channelAccessToken: require('../secret/secret.json').line.channelAccessToken
 });
 
 const OTP = require('../models/otp');
@@ -22,7 +26,7 @@ router.get('/cron/menses', async (req, res, next) => {
     let users = (await db.collection('Users').get()).docs;
     users.forEach(async (e, i) => {
       let user = new User(e.ref);
-      if (user.getMenses()) return;
+      if (await user.getMenses()) return;
       await line.pushMessage(e.ref.id, {
         type: 'template',
         altText: 'confirm template',
@@ -41,6 +45,16 @@ router.get('/cron/menses', async (req, res, next) => {
         }
       });
     });
+    res.send('ok');
+  } catch (e) {
+    return next(e);
+  }
+});
+
+router.get('/cron/clearotp', async (req, res, next) => {
+  try {
+    let otp = (await db.collection('OTP').orderBy('created', 'asc').get()).docs, i;
+    while (otp.length && moment().isAfter(moment((i = otp.shift()).get('created').toDate()).add(48, 'h'))) await i.ref.delete();
     res.send('ok');
   } catch (e) {
     return next(e);

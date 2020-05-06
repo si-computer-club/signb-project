@@ -41,7 +41,7 @@ class User {
     menses.docs.forEach((e, i) => {
       user.menses.push(e.data());
     });
-    user.menses.map = Menses.map;
+    // user.menses.map = Menses.map;
     return user;
   }
 }

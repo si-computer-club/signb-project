@@ -35,15 +35,27 @@ OTP.createToken = async function (userRef) {
 };
 
 OTP.activate = async function (token) {
+  if (!token) throw new InputError('Empty token');
   let data = await db.collection('OTP').doc(token).get();
   if (!data.exists) throw new InputError('Incorrect OTP');
-  if (moment().isAfter(moment(data.get('created')).add(30, 'm'))) throw new InputError('OTP expired');
+  let warn = {};
+  if (data.get('used')) warn.used = true;
+  if (moment().isAfter(moment(data.get('created').toDate()).add(30, 'm'))) warn.expired = true;
+  // if (data.get('used')) throw new Error('Already used OTP');
+  // if (moment().isAfter(moment(data.get('created').toDate()).add(30, 'm'))) throw new InputError('OTP expired');
 
   let user = new User(data.get('user'));
 
-  await data.ref.delete();
-  return await user.getData();
+  await data.ref.update({
+    used: true
+  });
+  let out = await user.getData();
+  if (Object.keys(warn).length) out.warn = warn;
+  return out;
 };
 
-/* OTP.createToken(db.collection('Users').doc('U283cce492091fb358cc954922461780e'));
+/* let user = new User(db.collection('Users').doc('Ue25c0b5430760b22118c4857d69613e9'));
+user.getData().then(res => console.log(res));
+
+OTP.createToken(db.collection('Users').doc('U283cce492091fb358cc954922461780e'));
 OTP.activate('9648').then(data => console.log(data.get('birthday'), data.menses[0].get('grade'))); */

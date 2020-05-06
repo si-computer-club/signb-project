@@ -37,8 +37,9 @@ const port = +process.env.PORT || 8080, ip = process.env.IP || '0.0.0.0';
   app.get('*', (req, res) => nextApp.getRequestHandler()(req, res));
 
   app.use((err, req, res, next) => {
-    console.error(err);
-    res.redirect('/');
+    console.error(err)
+    res.status(500).send('error');
+    // res.redirect('/');
   });
 
   app.listen(port, ip, () => console.log('Server running on http://%s:%s', ip, port));

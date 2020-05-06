@@ -13,6 +13,14 @@ class InputError extends Error {
     this.name = 'InputError';
     this.date = new Date();
   };
+
+  toJSON() {
+    return ({
+      name: this.name,
+      message: this.message,
+      date: this.date,
+    });
+  } // https://stackoverflow.com/a/18391400/4468834
 };
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#Custom_Error_Types

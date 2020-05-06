@@ -22,9 +22,11 @@ class Menses {
   constructor (mensesRef, grade, date) {
     if (!Menses.map[grade]) throw new Error('Invalid grade, must be 0, 1, 2 or 3');
 
+    console.log('menses date: ' + date);
+
     this.mensesRef = mensesRef;
     this.grade = grade;
-    this.date = date || moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    this.date = moment(date).set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toDate();
   }
 
   async save() {
