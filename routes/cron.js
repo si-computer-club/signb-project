@@ -23,24 +23,25 @@ const User = require('../models/user');
 
 router.get('/cron/menses', async (req, res, next) => {
   try {
+    let today = moment();
     let users = (await db.collection('Users').get()).docs;
     users.forEach(async (e, i) => {
       let user = new User(e.ref);
       if (await user.getMenses()) return;
       await line.pushMessage(e.ref.id, {
         type: 'template',
-        altText: 'confirm template',
+        altText: 'สอบถามประจำเดือน กรุณาตอบในโทรศัพท์',
         template: {
           type: 'confirm',
-          text: 'วันนี้คุณมีประจำเดือนไหมคะ',
+          text: `วันนี้ (${today.format('D/M')}) คุณมีประจำเดือนไหมคะ`,
           actions: [ {
             type: 'message',
             label: 'มี',
-            text: 'วันนี้มีประจำเดือน'
+            text: `วันที่ ${today.format('D/M')} มีประจำเดือน`
           }, {
             type: 'message',
             label: 'ไม่มี',
-            text: 'วันนี้ไม่มีประจำเดือน'
+            text: `วันที่ ${today.format('D/M')} ไม่มีประจำเดือน`
           } ]
         }
       });

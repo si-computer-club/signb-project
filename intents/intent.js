@@ -85,10 +85,26 @@ const intents = module.exports =  {
   },
 
   menses: async (agent, userId, grade) => {
-    // let today = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    let u = new User(db.collection('Users').doc(userId));
-    await u.addMenses(grade);
-    agent.add(`${moment().format('วันddddที่ D MMMM')} คุณมีประจำเดือนปริมาณ ${Menses.map[grade]} บันทึกข้อมูลสำเร็จ`);
+    let date;
+    // console.log(agent.contexts);
+    agent.contexts.forEach(e => {
+      if (e.name == 'menstruationyn-yes-followup') date = e.parameters['date-time'];
+    });
+    if (agent.parameters['date-time']) date = agent.parameters['date-time'];
+    date = moment(date).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    if (date.isAfter(moment())) {
+      agent.add('ข้อมูลผิดพลาด (date input is future)');
+      agent.clearOutgoingContexts();
+      return ;
+    }
+
+    let oldMenses = await db.collection('Users').doc(userId).collection('Menses').where('date', '=', date.toDate()).get();
+    let newMenses
+    if (!oldMenses.empty) newMenses = new Menses(oldMenses.docs[0].ref, grade, date);
+    else newMenses = new Menses(db.collection('Users').doc(userId).collection('Menses').doc(), grade, date);
+    await newMenses.save();
+    agent.add(`${date.format('วันddddที่ D MMMM')} คุณ${!grade ? 'ไม่' : ''}มีประจำเดือน${grade ? `ปริมาณ${Menses.map[grade]}` : ''} บันทึกข้อมูลสำเร็จ`);
+    agent.clearOutgoingContexts();
   },
   
   profile: async (agent, userId) => {
