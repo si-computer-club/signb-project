@@ -37,11 +37,11 @@ router.get('/cron/menses', async (req, res, next) => {
           actions: [ {
             type: 'message',
             label: 'มี',
-            text: `วันที่ ${today.format('D/M')} มีประจำเดือน`
+            text: `วันที่ ${today.format('D/M/Y')} มีประจำเดือน`
           }, {
             type: 'message',
             label: 'ไม่มี',
-            text: `วันที่ ${today.format('D/M')} ไม่มีประจำเดือน`
+            text: `วันที่ ${today.format('D/M/Y')} ไม่มีประจำเดือน`
           } ]
         }
       });
