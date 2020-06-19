@@ -29,7 +29,7 @@ This is a main repository for Siriraj Computer Club gynecology chatbot project. 
 1. Point Dialogflow Fulfillment webhook URL to your tunnel URL, append `/webhook/dialogflow` (Example: `https://aaaa1111.ngrok.io/webhook/dialogflow`).(ไปเข้า dialogflow https://dialogflow.cloud.google.com/#/agent/signb-project/fulfillment แล้วแก้ webhook url เป็น url ที่อยู่ใน ngrok อ่ะ อย่าลืมกด save ด้วย)
 1. (Optional, not necessary right now) Point LINE webhook URL to your tunnel URL, append `/webhook/line` (Example: `https://aaaa1111.ngrok.io/webhook/line`).
 1. create new file `secret/secret.json`, mimic the template in `secret/secret.json.example` and edit token to the real one. (สร้างไฟล์ตามนั้นเลย แล้วไปเอา token มาจากใน line developer https://developers.line.biz/console/channel/1653880785/messaging-api มาแปะ เป็น "token" เลย ไม่ต้องมี <> ด้านใน แล้วก็อย่าลืมแก้ประเภทไฟล์จาก example เป็น json ด้วย)
-1. `npm run dev`. (เข้า cmd แล้ว cd เข้าไปใน signb-project พิมพ์ npm run dev) รอมันรันเสร็จจะขึ้นว่า complete เราก็จะเข้าไปทักทายนว้องบอทได้ แล้วก็ดูใน ngrok ได้ว่ามันส่งไปไหม
+1. `npm run dev`. (เข้า cmd แล้ว cd เข้าไปใน signb-project พิมพ์ npm run dev) รอมันรันเสร็จจะขึ้นว่า complete เราก็จะเข้าไปทักทายนว้องบอทได้ (QRcodeคือในline developerเลย) แล้วก็ดูใน ngrok ได้ว่ามันส่งไปไหม
 1. Don't forget to change webhook back to original URL. (Should be like: `https://signb-project.appspot.com/webhook/dialogflow`) 
 
 ### Build pages and deploy for production usage
