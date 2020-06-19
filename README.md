@@ -24,6 +24,7 @@ This is a main repository for Siriraj Computer Club gynecology chatbot project. 
 1. (Optional) You can use [shortcut](https://superuser.com/a/1276344) to predefine the environment variable (for example, my shortcut script in `Target` field is: `C:\Windows\System32\cmd.exe /k "set GOOGLE_APPLICATION_CREDENTIALS=.\secret\[MY SERVICE ACCOUNT FILE].json&&cd [MY PROJECT FOLDER]"`) and set to always run as administrator.
 
 ### Test server in your local machine
+ของเรา http 8080 นะจ้ะเพิ่ลๆ
 1. Setup ngrok. Maybe this [tutorial](https://medium.com/linedevth/linebot-ngrok-b319841a49d7) will help. (__In 'section 2. ngrok' only, skip the LINE webhook section__, as we will set dialogflow webhook instead)
 1. Point Dialogflow Fulfillment webhook URL to your tunnel URL, append `/webhook/dialogflow` (Example: `https://aaaa1111.ngrok.io/webhook/dialogflow`).
 1. (Optional, not necessary right now) Point LINE webhook URL to your tunnel URL, append `/webhook/line` (Example: `https://aaaa1111.ngrok.io/webhook/line`).
