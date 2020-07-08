@@ -1,6 +1,6 @@
 {
   "name": "signb-project",
-  "version": "1.0.0",
+  "version": "0.1-alpha",
   "description": "SI GyneBot",
   "main": "server.js",
   "scripts": {
