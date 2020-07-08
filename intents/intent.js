@@ -146,6 +146,14 @@ ${otp}`);
     agent.add(`${date.format('วันddddที่ D MMMM')} คุณ${!grade ? 'ไม่' : ''}มีประจำเดือน${grade ? `ปริมาณ${Menses.map[grade]}` : ''}นะคะ แก้ไขเรียบร้อยค่ะ`);
     agent.clearOutgoingContexts();
   },
+
+  notification: async (agent, userId, noti) => {
+    let user = new User(db.collection('Users').doc(userId));
+    // agent.add(await user.getNotification());
+    await user.setNotification(noti);
+    agent.add(`${User.mapNoti[noti]}นะคะ แก้ไขเรียบร้อยค่ะ`);
+    agent.clearOutgoingContexts();
+  }
 };
  
 for (let k in intents) {

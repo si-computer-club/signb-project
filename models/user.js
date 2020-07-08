@@ -15,6 +15,13 @@ const InputError = require('./error');
 const Menses = require('./menses');
 
 class User {
+  static get mapNoti () {
+    return ({
+      regular: 'แจ้งเตือนปกติ',
+      none: 'ปิดการแจ้งเตือน',
+    });
+  };
+  
   constructor (userRef) {
     this.userRef = userRef;
   }
@@ -43,6 +50,19 @@ class User {
     });
     // user.menses.map = Menses.map;
     return user;
+  }
+
+  async setNotification(noti = 'regular') {
+    if (!User.mapNoti[noti]) throw new Error('Invalid noti, must be "regular" or "none"');
+    await this.userRef.update({
+      notification: noti
+    });
+    return noti;
+  }
+  
+  async getNotification() {
+    let data = (await this.userRef.get()).data();
+    return data.notification;
   }
 }
 

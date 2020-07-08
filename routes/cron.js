@@ -28,6 +28,7 @@ router.get('/cron/menses', async (req, res, next) => {
     users.forEach(async (e, i) => {
       let user = new User(e.ref);
       if (await user.getMenses()) return;
+      if (await user.getNotification() == 'none') return ;
       await line.pushMessage(e.ref.id, {
         type: 'template',
         altText: 'สอบถามประจำเดือน กรุณาตอบในโทรศัพท์',

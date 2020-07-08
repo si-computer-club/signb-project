@@ -16,13 +16,12 @@ class Menses {
       1: 'น้อย',
       2: 'ปานกลาง',
       3: 'มาก',
+      spot: '(Spot bleeding)',
     });
   };
 
   constructor (mensesRef, grade, date) {
-    if (!Menses.map[grade]) throw new Error('Invalid grade, must be 0, 1, 2 or 3');
-
-    // console.log('menses date: ' + date);
+    if (!Menses.map[grade]) throw new Error('Invalid grade, must be 0, 1, 2, 3, or "spot"');
 
     this.mensesRef = mensesRef;
     this.grade = grade;
