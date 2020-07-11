@@ -20,6 +20,7 @@ const { RichResponse, Payload } = require('dialogflow-fulfillment');
 const OTP = require('../models/otp.js');
 const Menses = require('../models/menses');
 const User = require('../models/user');
+const Message = require('../models/message');
 
 const wrapper = f => ( (...agent) => ( async () => f(...agent) ) );
 const line = str => str.split('\n').map(e => e.trimStart()).join('\n');
@@ -32,43 +33,30 @@ const intents = module.exports =  {
   birthdate: async (agent, userId) => {
     let bd = moment(agent.parameters.birthdate);
     if (bd.isAfter(moment())) bd = bd.subtract(43, 'y');
-    agent.context.set('confirm-age', 3, { birthdate: bd });
+    agent.context.set('age', 3, { birthdate: bd });
+    agent.context.set('confirmage-followup', 3);
 
-    let response = new Payload('LINE', {
-      "type": "template",
-      "altText": "confirm",
-      "template": {
-        "type": "confirm",
-        "text": `วันเกิดของคุณคือ ${bd.format('วันddddที่ D MMMM YYYY')} ขณะนี้คุณอายุ ${moment().diff(bd, 'years')} ปี ถูกต้องไหมคะ`,
-        "actions": [
-          {
-            "type": "message",
-            "label": "ใช่",
-            "text": "ใช่"
-          },
-          {
-            "type": "message",
-            "label": "ไม่ใช่",
-            "text": "ไม่ใช่"
-          }
-        ]
-      }
-    }, {
+    let response = new Payload('LINE', Message.confirmBirthdate(bd), {
       sendAsMessage: true,
       rawPayload: false,
     });
     agent.add(response);
   },
 
-  'confirm age': async (agent, userId) => {
+  'confirm age - yes': async (agent, userId) => {
     let bd;
     agent.contexts.forEach(e => {
-      if (e.name == 'confirm-age') bd = e.parameters.birthdate;
+      if (e.name == 'age') bd = e.parameters.birthdate;
     });
     await db.collection('Users').doc(userId).set({
       birthdate: bd
     });
     agent.add('บันทึกสำเร็จ');
+    agent.clearOutgoingContexts();
+  },
+
+  'confirm age - no': async (agent, userId) => {
+    agent.add('โปรดกรอกวันเกิดใหม่ค่ะ');
     agent.clearOutgoingContexts();
   },
 
@@ -82,6 +70,15 @@ const intents = module.exports =  {
     });
     agent.add('บันทึกข้อมูลสำเร็จ');
     agent.clearOutgoingContext();
+  },
+
+  askMenses: async (agent, userId) => {
+    let today = moment();
+    let response = new Payload('LINE', Message.askMenses(today), {
+      sendAsMessage: true,
+      rawPayload: false,
+    });
+    agent.add(response);
   },
 
   menses: async (agent, userId, grade) => {

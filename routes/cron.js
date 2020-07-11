@@ -18,6 +18,7 @@ const line = new Line.Client({
 
 const OTP = require('../models/otp');
 const User = require('../models/user');
+const Message = require('../models/message');
 
 // let jew = 'U283cce492091fb358cc954922461780e';
 
@@ -29,23 +30,7 @@ router.get('/cron/menses', async (req, res, next) => {
       let user = new User(e.ref);
       if (await user.getMenses()) return;
       if (await user.getNotification() == 'none') return ;
-      await line.pushMessage(e.ref.id, {
-        type: 'template',
-        altText: 'สอบถามประจำเดือน กรุณาตอบในโทรศัพท์',
-        template: {
-          type: 'confirm',
-          text: `วันนี้ (${today.format('D/M')}) คุณมีประจำเดือนไหมคะ`,
-          actions: [ {
-            type: 'message',
-            label: 'มี',
-            text: `วันที่ ${today.format('D/M/Y')} มีประจำเดือน`
-          }, {
-            type: 'message',
-            label: 'ไม่มี',
-            text: `วันที่ ${today.format('D/M/Y')} ไม่มีประจำเดือน`
-          } ]
-        }
-      });
+      await line.pushMessage(e.ref.id, Message.askMenses(today));
     });
     res.send('ok');
   } catch (e) {
