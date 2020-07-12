@@ -95,6 +95,232 @@ class Message {
       }
     }
   }
+  static askPainImage() {
+    return {
+      "imageUrl": "https://storage.googleapis.com/signb-project.appspot.com/painscale.jpg"
+    }
+  }
+  static askPain(today = moment()) {
+    return {
+      "type": "flex",
+      "altText": "Flex Message",
+      "contents": {
+        "type": "bubble",
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "md",
+          "action": {
+            "type": "uri",
+            "label": "Action",
+            "uri": "https://linecorp.com"
+          },
+          "contents": [
+            {
+              "type": "text",
+              "text": "คุณมีความปวดระดับใด",
+              "size": "lg",
+              "align": "start",
+              "weight": "bold"
+            },
+            {
+              "type": "box",
+              "layout": "vertical",
+              "spacing": "sm",
+              "contents": [
+                {
+                  "type": "box",
+                  "layout": "horizontal",
+                  "contents": [
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "0",
+                        "text": "0"
+                      },
+                      "color": "#B1E5A6",
+                      "margin": "xs",
+                      "style": "primary"
+                    },
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "1",
+                        "text": "1"
+                      },
+                      "color": "#B1E5A6",
+                      "margin": "xs",
+                      "style": "primary"
+                    },
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "2",
+                        "text": "2"
+                      },
+                      "color": "#B1E5A6",
+                      "margin": "xs",
+                      "style": "primary"
+                    },
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "3",
+                        "text": "3"
+                      },
+                      "color": "#B1E5A6",
+                      "margin": "xs",
+                      "style": "primary"
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "layout": "horizontal",
+                  "contents": [
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "4",
+                        "text": "4"
+                      },
+                      "color": "#FFE270",
+                      "margin": "xs",
+                      "style": "primary"
+                    },
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "5",
+                        "text": "5"
+                      },
+                      "color": "#FFE270",
+                      "margin": "xs",
+                      "style": "primary"
+                    },
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "6",
+                        "text": "6"
+                      },
+                      "color": "#FFE270",
+                      "margin": "xs",
+                      "style": "primary"
+                    },
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "7",
+                        "text": "7"
+                      },
+                      "color": "#FFE270",
+                      "margin": "xs",
+                      "style": "primary"
+                    }
+                  ]
+                },
+                {
+                  "type": "box",
+                  "layout": "horizontal",
+                  "contents": [
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "8",
+                        "text": "8"
+                      },
+                      "color": "#E76F6F",
+                      "margin": "xs",
+                      "style": "primary"
+                    },
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "9",
+                        "text": "9"
+                      },
+                      "color": "#E76F6F",
+                      "margin": "xs",
+                      "style": "primary"
+                    },
+                    {
+                      "type": "button",
+                      "action": {
+                        "type": "message",
+                        "label": "10",
+                        "text": "10"
+                      },
+                      "color": "#E76F6F",
+                      "margin": "xs",
+                      "style": "primary"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    };
+  }
+
+  static askDrug() {
+    return {
+      "type": "flex",
+      "altText": "Flex Message",
+      "contents": {
+        "type": "bubble",
+        "direction": "ltr",
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "text",
+              "text": "วันนี้คุณทาน/ใช้ยาตามที่แพทย์สั่งครบไหมคะ",
+              "size": "lg",
+              "align": "start",
+              "weight": "regular",
+              "wrap": true
+            }
+          ]
+        },
+        "footer": {
+          "type": "box",
+          "layout": "vertical",
+          "contents": [
+            {
+              "type": "button",
+              "action": {
+                "type": "message",
+                "label": "ครบ",
+                "text": "ครบ"
+              }
+            },
+            {
+              "type": "button",
+              "action": {
+                "type": "message",
+                "label": "ไม่ครบ/ไม่ได้ทาน",
+                "text": "ไม่ครบ"
+              }
+            }
+          ]
+        }
+      }
+    };
+  }
 }
 
 module.exports =  Message;

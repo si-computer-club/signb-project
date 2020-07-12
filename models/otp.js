@@ -41,8 +41,8 @@ OTP.activate = async function (token) {
   let warn = {};
   if (data.get('used')) warn.used = true;
   if (moment().isAfter(moment(data.get('created').toDate()).add(30, 'm'))) warn.expired = true;
-  // if (data.get('used')) throw new Error('Already used OTP');
-  // if (moment().isAfter(moment(data.get('created').toDate()).add(30, 'm'))) throw new InputError('OTP expired');
+  if (data.get('used')) throw new Error('Already used OTP');
+  if (moment().isAfter(moment(data.get('created').toDate()).add(30, 'm'))) throw new InputError('OTP expired');
 
   let user = new User(data.get('user'));
 

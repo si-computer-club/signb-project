@@ -72,12 +72,15 @@ parameters: ${JSON.stringify(agent.parameters)}`);
       intentMap.set('menstruation - normal', intent.menses(agent, userId, 2));
       intentMap.set('menstruation - heavy', intent.menses(agent, userId, 3));
       intentMap.set('menstruation - spot', intent.menses(agent, userId, 'spot'));
+      intentMap.set('pain', intent.pain(agent, userId));
+      intentMap.set('drug', intent.drug(agent, userId));
       intentMap.set('get pin', intent.otp(agent, userId));
-      intentMap.set('edit - menstruation - date - no', intent.editMenses(agent, userId, 0));
+      intentMap.set('edit - menstruation - date', intent.editMenses(agent, userId, 0));
+      /*intentMap.set('edit - menstruation - date - no', intent.editMenses(agent, userId, 0));
       intentMap.set('edit - menstruation - date - yes - light', intent.editMenses(agent, userId, 1));
       intentMap.set('edit - menstruation - date - yes - normal', intent.editMenses(agent, userId, 2));
       intentMap.set('edit - menstruation - date - yes - heavy', intent.editMenses(agent, userId, 3));
-      intentMap.set('edit - menstruation - date - yes - spot', intent.editMenses(agent, userId, 'spot'));
+      intentMap.set('edit - menstruation - date - yes - spot', intent.editMenses(agent, userId, 'spot'));*/
       intentMap.set('notification - none', intent.notification(agent, userId, 'none'));
       intentMap.set('notification - regular', intent.notification(agent, userId, 'regular'));
     }
