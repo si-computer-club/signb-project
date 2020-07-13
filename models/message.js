@@ -76,7 +76,7 @@ class Message {
   static confirmBirthdate(bd) {
     return {
       "type": "template",
-      "altText": "confirm",
+      "altText": "สอบถามวันเกิด กรุณาตอบในโทรศัพท์",
       "template": {
         "type": "confirm",
         "text": `วันเกิดของคุณคือ ${bd.format('วันddddที่ D MMMM YYYY')} ขณะนี้คุณอายุ ${moment().diff(bd, 'years')} ปี ถูกต้องไหมคะ`,
@@ -103,7 +103,7 @@ class Message {
   static askPain(today = moment()) {
     return {
       "type": "flex",
-      "altText": "Flex Message",
+      "altText": "สอบถามความเจ็บปวด กรุณาตอบในโทรศัพท์",
       "contents": {
         "type": "bubble",
         "body": {
@@ -278,7 +278,7 @@ class Message {
   static askDrug() {
     return {
       "type": "flex",
-      "altText": "Flex Message",
+      "altText": "สอบถามประวัติยา กรุณาตอบในโทรศัพท์",
       "contents": {
         "type": "bubble",
         "direction": "ltr",
