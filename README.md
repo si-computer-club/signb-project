@@ -25,7 +25,8 @@ This is a main repository for Siriraj Computer Club gynecology chatbot project. 
 
 ### Test server in your local machine
 ของเรา http 8080 นะจ้ะเพิ่ลๆ
-1. Setup ngrok. Maybe this [tutorial](https://medium.com/linedevth/linebot-ngrok-b319841a49d7) will help. (__In 'section 2. ngrok' only, skip the LINE webhook section__, as we will set dialogflow webhook instead) (เข้า ngrok แล้วพิมพ์ ngrok http 8080 มันจะขึ้นอีกหน้ามา) 
+1. Setup ngrok. Maybe this [tutorial](https://medium.com/linedevth/linebot-ngrok-b319841a49d7) will help. (__In 'section 2. ngrok' only, skip the LINE webhook section__, as we will set dialogflow webhook instead) (เข้า ngrok แล้วพิมพ์ ngrok http 8080 มันจะขึ้นอีกหน้ามา) <br>
+&nbsp;&nbsp;&nbsp;&nbsp; [*ตอนนี้ (13/7/2020) มีปัญหา webhook จากไลน์ไม่สามารถเข้ามาใน ngrok ได้ สามารถแก้ได้โดยลองเปลี่ยน region จาก default(US) เป็น jp โดยใช้ parameter -region (ดังนั้นคำสั่งจะอยู่ในนรูปแบบ ngrok http -region jp xxxx เป็นต้น ) ref: [https://youtu.be/oxE4Ri_z__E](https://youtu.be/oxE4Ri_z__E)*\]
 1. Point Dialogflow Fulfillment webhook URL to your tunnel URL, append `/webhook/dialogflow` (Example: `https://aaaa1111.ngrok.io/webhook/dialogflow`).(ไปเข้า dialogflow https://dialogflow.cloud.google.com/#/agent/signb-project/fulfillment แล้วแก้ webhook url เป็น url ที่อยู่ใน ngrok อ่ะ อย่าลืมกด save ด้วย)
 1. (Optional, not necessary right now) Point LINE webhook URL to your tunnel URL, append `/webhook/line` (Example: `https://aaaa1111.ngrok.io/webhook/line`).
 1. create new file `secret/secret.json`, mimic the template in `secret/secret.json.example` and edit token to the real one. (สร้างไฟล์ตามนั้นเลย แล้วไปเอา token มาจากใน line developer https://developers.line.biz/console/channel/1653880785/messaging-api มาแปะ เป็น "token" เลย ไม่ต้องมี <> ด้านใน แล้วก็อย่าลืมแก้ประเภทไฟล์จาก example เป็น json ด้วย)
