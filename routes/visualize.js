@@ -15,17 +15,17 @@ const db = new Firestore({
 const OTP = require('../models/otp');
 const User = require('../models/user');
 
-router.get('/addmenses', (req, res) => {
-  let user = new User(db.collection('Users').doc('U283cce492091fb358cc954922461780e'));
-  user.addMenses(3);
-  user.addMenses(2);
-  user.addMenses(3);
-  user.addMenses(1);
-});
-
 router.get('/visualize/otp/create', async (req, res, next) => {
   try {
     res.send(await OTP.createToken(db.collection('Users').doc('Ue25c0b5430760b22118c4857d69613e9')));
+  } catch (e) {
+    return next(e);
+  }
+});
+
+router.get('/visualize/terms', async (req, res, next) => {
+  try {
+    res.send('หลังจากใส่รหัสจะถือว่าผู้ใช้ยินยอมให้แพทย์เข้าถึงข้อมูลส่วนตัวทั้งหมดที่มีบันทึกในระบบ');
   } catch (e) {
     return next(e);
   }

@@ -14,6 +14,14 @@ const db = new Firestore({
 const InputError = require('./error');
 const Menses = require('./menses');
 
+const mapOutput = {
+  0: 0,
+  spot: 1,
+  1: 2,
+  2: 3,
+  3: 4
+}
+
 class User {
   static get mapNoti () {
     return ({
@@ -46,7 +54,9 @@ class User {
     let menses = await this.userRef.collection('Menses').get();
     user.menses = [];
     menses.docs.forEach((e, i) => {
-      user.menses.push(e.data());
+      e = e.data();
+      e.grade = mapOutput[e.grade];
+      user.menses.push(e);
     });
     // user.menses.map = Menses.map;
     return user;

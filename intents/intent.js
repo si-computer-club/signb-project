@@ -86,9 +86,19 @@ const intents = module.exports =  {
     agent.add(response);
   },
 
-  menses: async (agent, userId, grade) => {
-    let date;
+  menses: async (agent, userId) => {
+    let date, grade;
     if (agent.parameters['date']) date = agent.parameters['date'];
+    if (!agent.parameters['quality']) throw new Error('quality not found');
+
+    const map = {
+      no: 0,
+      light: 1,
+      normal: 2,
+      heavy: 3,
+      spot: 'spot',
+    }
+    grade = map[agent.parameters['quality']];
     date = moment(date).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
     if (date.isAfter(moment())) {
       agent.add('ข้อมูลผิดพลาด (date input is future)');
@@ -172,7 +182,7 @@ const intents = module.exports =  {
     let otp = await OTP.createToken(db.collection('Users').doc(userId));
     agent.add(
 `⚠️ โปรดอ่านข้อตกลงที่ลิ้งค์ด้านล่างก่อนยินยอมแจ้งรหัสแก่แพทย์ ⚠️
-[LINK]
+https://signb-project.appspot.com/visualize/terms
 *รหัสสำหรับการเข้าถึงข้อมูลคือ*
 ${otp}`);
     clearOutgoingContexts(agent);
