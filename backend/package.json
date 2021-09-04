@@ -1,0 +1,21 @@
+{
+  "name": "signb-project",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production node server.js",
+    "deploy": "gcloud app deploy app.yaml cron.yaml --project=signb-project"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^4.5.0",
+    "@line/bot-sdk": "^7.1.0",
+    "actions-on-google": "^2.13.0",
+    "cors": "^2.8.5",
+    "dialogflow-fulfillment": "^0.6.1",
+    "express": "^4.17.1",
+    "moment": "^2.25.3",
+    "moment-timezone": "^0.5.30",
+    "node-fetch": "^2.6.0"
+  }
+}
